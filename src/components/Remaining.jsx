@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { AppContext } from '../context/AppContext'
 
 function Remaining() {
-    const { expenses, budget } = useContext(AppContext);
+    const { expenses, budget,setTotalExpenses } = useContext(AppContext);
 
     console.log(expenses)
     const testExpenses = [ 42, 402 , 52 ]
@@ -22,10 +22,12 @@ function Remaining() {
         console.log(totali)
         return totali
     },0)
+
     const totalExpenses = expenses.reduce((total, item) => {
         return (total = total + item.cost);
     }, 0);
 
+    setTotalExpenses(totalExpenses);
     const alertType = totalExpenses > budget ? 'alert-danger' : 'alert-success';
 
     return (

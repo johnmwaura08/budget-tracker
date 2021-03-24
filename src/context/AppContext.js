@@ -1,4 +1,4 @@
-import { createContext, useReducer } from "react"
+import { createContext, useReducer, useState } from "react"
 
 const AppReducer = (state, action) => {
     switch(action.type){
@@ -10,6 +10,7 @@ const AppReducer = (state, action) => {
         default: return state;
     }
 }
+
 const initialState = {
     budget: 2055,
     expenses: [
@@ -23,7 +24,7 @@ export const AppContext = createContext();
 
 export const AppProvider = (props) => {
     const [state, dispatch] = useReducer(AppReducer, initialState);
-
+    const [ totalExpenses, setTotalExpenses] =useState(0)
     const {budget, expenses} = state;
 
     return (
@@ -31,6 +32,8 @@ export const AppProvider = (props) => {
             value={{
                 budget,
                 expenses,
+                totalExpenses,
+                setTotalExpenses,
                 dispatch
             }}
         >{props.children}</AppContext.Provider>
