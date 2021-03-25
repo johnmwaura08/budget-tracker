@@ -1,4 +1,4 @@
-import { createContext, useReducer, useState } from "react"
+import { createContext, useReducer } from "react"
 
 const AppReducer = (state, action) => {
     switch(action.type){
@@ -7,6 +7,24 @@ const AppReducer = (state, action) => {
                 ...state,
                 expenses: [...state.expenses, action.payload]
             }
+        case 'EDIT_EXPENSE':
+            const updatedExpense = action.payload;
+
+            const updatedExpenses = state.expenses.map((expense) => {
+                if(expense.id === updatedExpense.id){
+                    return updatedExpense
+                }
+                return expense
+            })
+            return{
+                ...state,
+                expenses: updatedExpenses  
+            }    
+        case 'DELETE_EXPENSE' :
+            return {
+                ...state,
+                expenses: state.expenses.filter((expense) => expense.id !== action.payload)
+            }   
         default: return state;
     }
 }
@@ -24,7 +42,6 @@ export const AppContext = createContext();
 
 export const AppProvider = (props) => {
     const [state, dispatch] = useReducer(AppReducer, initialState);
-    const [ totalExpenses, setTotalExpenses] =useState(0)
     const {budget, expenses} = state;
 
     return (
@@ -32,8 +49,6 @@ export const AppProvider = (props) => {
             value={{
                 budget,
                 expenses,
-                totalExpenses,
-                setTotalExpenses,
                 dispatch
             }}
         >{props.children}</AppContext.Provider>
